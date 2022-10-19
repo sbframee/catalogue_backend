@@ -14,8 +14,10 @@ router.post("/postItemCategories", async (req, res) => {
       let response = await ItemCategories.find({});
       response = JSON.parse(JSON.stringify(response));
       //   console.log(response)
-      value.sort_order =response?.length?
-        Math.max(...response?.map((o) => o?.sort_order || 0)) + 1 : 1;
+      value.sort_order =
+        response && response?.length
+          ? Math.max(...response?.map((o) => o?.sort_order || 0)) + 1
+          : 1;
     }
     console.log(value);
     let response = await ItemCategories.create(value);
@@ -67,9 +69,9 @@ router.delete("/deleteItemCategories", async (req, res) => {
           "All the items and Item Images will be deleted. Confirm Delete Category ?",
       });
     } else {
-      let response = await ItemCategories.deleteMany(
-        { category_uuid: value.category_uuid }
-      );
+      let response = await ItemCategories.deleteMany({
+        category_uuid: value.category_uuid,
+      });
       if (response) {
         res.json({ success: true, result: response });
       } else
@@ -92,9 +94,9 @@ router.delete("/deleteAllItemCategories", async (req, res) => {
     console.log(value);
     await Items.deleteMany({ category_uuid: value.category_uuid });
 
-    let response = await ItemCategories.deleteMany(
-      { category_uuid: value.category_uuid }
-    );
+    let response = await ItemCategories.deleteMany({
+      category_uuid: value.category_uuid,
+    });
     if (response) {
       res.json({ success: true, result: response });
     } else res.json({ success: false, message: "Item Categories Not updated" });
@@ -106,7 +108,7 @@ router.get("/getActiveItemCategories/:organization_uuid", async (req, res) => {
   try {
     let response = await ItemCategories.find({
       organization_uuid: req.params.organization_uuid,
-      status:1
+      status: 1,
     });
     if (response.length) {
       res.json({ success: true, result: response });
@@ -120,7 +122,7 @@ router.get("/getItemCategories/:organization_uuid", async (req, res) => {
     let response = await ItemCategories.find({
       organization_uuid: req.params.organization_uuid,
     });
-    console.log(response.length)
+    console.log(response.length);
     if (response.length) {
       res.json({ success: true, result: response });
     } else res.json({ success: false, message: "Item Categories Not found" });
