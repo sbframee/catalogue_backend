@@ -15,8 +15,8 @@ router.post("/postItemCategories", async (req, res) => {
       response = JSON.parse(JSON.stringify(response));
       //   console.log(response)
       value.sort_order =
-        response && response?.length
-          ? Math.max(...response?.map((o) => o?.sort_order || 0)) + 1
+        response && response.length
+          ? Math.max(...response.map((o) => o.sort_order || 0)) + 1
           : 1;
     }
     console.log(value);
