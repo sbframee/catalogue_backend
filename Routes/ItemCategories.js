@@ -14,8 +14,8 @@ router.post("/postItemCategories", async (req, res) => {
       let response = await ItemCategories.find({});
       response = JSON.parse(JSON.stringify(response));
       //   console.log(response)
-      value.sort_order =
-        Math.max(...response.map((o) => o?.sort_order || 0)) + 1 || 0;
+      value.sort_order =response?.length?
+        Math.max(...response?.map((o) => o?.sort_order || 0)) + 1 : 1;
     }
     console.log(value);
     let response = await ItemCategories.create(value);
