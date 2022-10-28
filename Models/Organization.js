@@ -25,6 +25,9 @@ const OrganizationSchema = new mongoose.Schema({
   organization_logo: {
     type: String,
   },
+  theme_color: {
+    type: String,
+  },
   domains: [
     {
       type: String,
