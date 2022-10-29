@@ -69,12 +69,13 @@ router.get("/getOrganizationData/:organization_uuid", async (req, res) => {
   try {
     let { organization_uuid } = req.params;
     let response = await Organization.findOne({ organization_uuid });
+    console.log(response)
     let {
-      organization_whatsapp_number,
-      organization_call_number,
-      organization_whatsapp_message,
-      organization_logo,
-      organization_title,
+      organization_whatsapp_number="",
+      organization_call_number="",
+      organization_whatsapp_message="",
+      organization_logo="",
+      organization_title="",
     } = response;
     if (response) {
       res.json({
