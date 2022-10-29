@@ -38,7 +38,15 @@ router.post("/getOrganization", async (req, res) => {
   try {
     let domains = req.body.domain;
     let response = await Organization.findOne({ domains });
-    let { organization_uuid="", organization_title="", organization_logo="",theme_color=""} = response;
+    let {
+      organization_uuid = "",
+      organization_title = "",
+      organization_logo = "",
+      theme_color = "",
+      organization_call_number,
+      organization_whatsapp_message,
+      organization_whatsapp_number,
+    } = response;
     if (response) {
       res.json({
         success: true,
@@ -46,7 +54,10 @@ router.post("/getOrganization", async (req, res) => {
           organization_uuid,
           organization_title,
           organization_logo,
-          theme_color
+          theme_color,
+          organization_call_number,
+          organization_whatsapp_message,
+          organization_whatsapp_number,
         },
       });
     } else res.json({ success: false, message: "Organization Not found" });
