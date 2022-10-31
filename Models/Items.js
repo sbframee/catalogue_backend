@@ -4,6 +4,9 @@ const ItemsSchema = new mongoose.Schema({
   category_uuid: {
     type: String,
   },
+  organization_uuid: {
+    type: String,
+  },
   item_uuid: {
     type: String,
   },
