@@ -27,11 +27,8 @@ const ItemsSchema = new mongoose.Schema({
   Items_uuid: {
     type: String,
   },
-  image_urls: [
-    {
-      type: String,
-    },
-  ],
+
+  image_urls: [{ url: { type: String }, sort_order: { type: Number } }],
   price: {
     type: Number,
   },
