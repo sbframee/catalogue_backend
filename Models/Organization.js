@@ -33,6 +33,29 @@ const OrganizationSchema = new mongoose.Schema({
       type: String,
     },
   ],
+  org_whatsapp_number: [
+    {
+      message: {
+        type: String,
+      },
+      tag: {
+        type: String,
+      },
+      mobile: {
+        type: String,
+      },
+    },
+  ],
+  org_call_number: [
+    {
+      tag: {
+        type: String,
+      },
+      mobile: {
+        type: String,
+      },
+    },
+  ],
 });
 
 module.exports = mongoose.model("organization", OrganizationSchema);
