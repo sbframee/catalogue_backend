@@ -32,6 +32,9 @@ const ItemsSchema = new mongoose.Schema({
   price: {
     type: Number,
   },
+  strip_price: {
+    type: Number,
+  },
 });
 
 module.exports = mongoose.model("items", ItemsSchema);
