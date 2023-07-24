@@ -1,27 +1,45 @@
-const aws = require("aws-sdk");
-const { v4: uuid } = require("uuid");
-const region = "ap-south-1";
-const bucketName = "upload-catalogue-images";
-const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
-const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+const { S3Client, GetObjectCommand, PutObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3")
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner")
+const { v4 } = require("uuid")
+const path = require("path")
 
-const s3 = new aws.S3({
-  region,
-  accessKeyId,
-  secretAccessKey,
-  signatureVersion: "v4",
-});
+const bucketName = process.env.BUCKET_NAME
+const accessKeyId = process.env.AWS_ACCESS_KEY_ID
+const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
 
-const generateUploadURL = async () => {
-  const imageName = uuid();
-  const params = {
-    Bucket: bucketName,
-    Key: imageName,
-    Expires: 60,
-  };
-  const uploadURL = await s3.getSignedUrlPromise("putObject", params);
-  return uploadURL;
-};
+const client = new S3Client({
+	region: "ap-south-1",
+	credentials: {
+		accessKeyId,
+		secretAccessKey
+	}
+})
 
+const getObjectURL = async key => {
+	const command = new GetObjectCommand({
+		Bucket: bucketName,
+		Key: key
+	})
+	const url = await getSignedUrl(client, command, { expiresIn: 60 })
+	return url
+}
 
-module.exports = generateUploadURL;
+const putObjectURL = async (filename, contentType) => {
+	const command = new PutObjectCommand({
+		Bucket: bucketName,
+		Key: v4() + path.extname(filename),
+		ContentType: contentType
+	})
+	const url = await getSignedUrl(client, command, { expiresIn: 60 })
+	return url
+}
+
+const deleteObject = async key => {
+	const command = new DeleteObjectCommand({
+		Bucket: bucketName,
+		Key: key
+	})
+	await client.send(command)
+}
+
+module.exports = { getObjectURL, putObjectURL, deleteObject }
