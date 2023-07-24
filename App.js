@@ -1,18 +1,16 @@
+require("dotenv").config()
+
 const cors = require("cors")
 const express = require("express")
-
-const mongoose = require("mongoose")
-mongoose.set("strictQuery", false)
-
-const connectDB = require("./config/mongoDb")
 const morgan = require("morgan")
-const env = require("dotenv")
-var bodyParser = require("body-parser")
+const connectDB = require("./config/mongoDb")
+
+const bodyParser = require("body-parser")
 const organization = require("./Routes/Organization")
 const ItemCategories = require("./Routes/ItemCategories")
 const Items = require("./Routes/Items")
 const { putObjectURL, getObjectURL, deleteObject } = require("./s3")
-env.config()
+
 connectDB()
 app = express()
 app.use(
@@ -36,7 +34,7 @@ app.use("/Organization", organization)
 app.use("/ItemCategories", ItemCategories)
 app.use("/Items", Items)
 
-app.get("/s3/delete_object/:key", async (req, res) => {
+app.delete("/s3/delete_object/:key", async (req, res) => {
 	const { key } = req.params
 	await deleteObject(key)
 	res.send("Done")
@@ -44,9 +42,9 @@ app.get("/s3/delete_object/:key", async (req, res) => {
 app.get("/s3/object_url/:key", async (req, res) => {
 	const { key } = req.params
 	const url = await getObjectURL(key)
-	res.send({ url })
+	res.redirect(url)
 })
-app.get("/s3/upload_url", async (req, res) => {
+app.post("/s3/upload_url", async (req, res) => {
 	const { filename, contentType } = await req.body
 	const url = await putObjectURL(filename, contentType)
 	res.send({ url })

@@ -20,17 +20,18 @@ const getObjectURL = async key => {
 		Bucket: bucketName,
 		Key: key
 	})
-	const url = await getSignedUrl(client, command, { expiresIn: 60 })
+	const url = await getSignedUrl(client, command, { expiresIn: 100 })
 	return url
 }
 
 const putObjectURL = async (filename, contentType) => {
+	console.log({ filename, contentType })
 	const command = new PutObjectCommand({
 		Bucket: bucketName,
 		Key: v4() + path.extname(filename),
 		ContentType: contentType
 	})
-	const url = await getSignedUrl(client, command, { expiresIn: 60 })
+	const url = await getSignedUrl(client, command, { expiresIn: 100 })
 	return url
 }
 
