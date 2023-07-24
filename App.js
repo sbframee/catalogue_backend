@@ -46,8 +46,8 @@ app.get("/s3/object_url/:key", async (req, res) => {
 })
 app.post("/s3/upload_url", async (req, res) => {
 	const { filename, contentType } = await req.body
-	const url = await putObjectURL(filename, contentType)
-	res.send({ url })
+	const objectDetails = await putObjectURL(filename, contentType)
+	res.send(objectDetails)
 })
 
 module.exports = app
